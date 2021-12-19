@@ -1,4 +1,4 @@
-tabPanel(title = "Produktion",
+tabPanel(title = "Day Ahead Price",
          includeCSS("bootstrap.css"),
          fluidPage(
            theme = shinytheme("flatly"),
@@ -10,16 +10,16 @@ tabPanel(title = "Produktion",
                id = "new",
                
                sidebarPanel(
-                 width = 4,
+                 width = 2,
                  fluid = TRUE,
-                 menuItem("Wulfener Markt 387", tabName = "dash_ui", selected = TRUE),
+                 menuItem("Time Series", tabName = "dash_ui", selected = TRUE),
                  
                  
                  
                )
              ),
              
-             mainPanel(width = 8,
+             mainPanel(width = 10,
                        tabItems(source(
                          file.path("Dashboard/", "dashboard_ui.R"),
                          encoding = "UTF-8",

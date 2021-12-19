@@ -1,9 +1,9 @@
-
+'
 day_ahead_prices_df <- api_day_ahead_prices(document_type = "A44",
                      in_Domain = "10YCZ-CEPS-----N",
                      out_Domain = "10YCZ-CEPS-----N",
-                     period_start = "201512312300",
-                     period_end = "201612312300")
+                     period_start = "202012312300",
+                     period_end = "202112192300")
 
 
 
@@ -93,6 +93,76 @@ api_day_ahead_prices <-
     select(-timeInterval) %>%
     mutate(timestamp = as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%S")) %>%
     unnest(., value) %>%
-    mutate(value = as.numeric(value))
+    mutate(value = as.numeric(value)) %>% 
+    write.csv("C:/Users/sascha/strom-in-zahlen/api/day_ahead_price_db.csv",row.names=FALSE)
   
   }
+'
+
+day_ahead_prices_df <- read.csv("C:/Users/sascha/strom-in-zahlen/api/day_ahead_price_db.csv")
+'day_ahead_prices_df <- read.csv("C:/Users/sascha/strom-in-zahlen/api/day_ahead_price_db.csv")
+
+day_ah_pr_chart <- reactive({
+  data <- day_ahead_prices_df
+  data %>% 
+    mutate(timestamp = as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%S")) %>% 
+    group_by(timestamp = floor_date(timestamp, unit = "day")) %>%
+    summarise(value = sum(value)) %>% 
+    ggplot(aes(x = timestamp, y = value)) + 
+    geom_line( size = 1) +
+    geom_smooth()+
+    scale_color_manual(values = c("#00AFBB", "#E7B800"))
+})
+
+  
+  
+'
+
+day_ah_pr_chart <- reactive({
+  data <- day_ahead_prices_df
+  data %>% 
+  mutate(timestamp = as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%S")) %>%
+ # group_by(timestamp = floor_date(timestamp, unit = "day")) %>%
+  #summarise(value = sum(value)) %>%
+  plot_ly(type = 'scatter', mode = 'lines') %>%
+  add_trace(x = ~ timestamp,
+            y = ~ value,
+            name = 'time') %>%
+
+  layout(showlegend = F,    title = "Day Ahead Price",
+         xaxis = list(
+           rangeslider = list(visible = T),
+           rangeselector = list(buttons = list(
+             list(
+               count = 1,
+               label = "1m",
+               step = "month",
+               stepmode = "backward"
+             ),
+             list(
+               count = 6,
+               label = "6m",
+               step = "month",
+               stepmode = "backward"
+             ),
+             list(
+               count = 3,
+               label = "3D",
+               step = "day",
+               stepmode = "backward"
+             ),
+             list(
+               count = 1,
+               label = "1y",
+               step = "year",
+               stepmode = "backward"
+             ),
+             list(step = "all")
+           ))
+         ))
+})
+
+
+output$day_ah_pr_chart_output <- renderPlotly({
+  day_ah_pr_chart()
+})

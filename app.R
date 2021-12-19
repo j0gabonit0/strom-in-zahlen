@@ -10,6 +10,10 @@ library(tidyr)
 library(readr)
 library(shinyjs)
 library(shinythemes)
+library(httr)
+library(xml2)
+library(lubridate)
+library(plotly)
 
 
 # Put them together into a dashboardPage
@@ -30,7 +34,7 @@ server <- function(input, output, session) {
   
   # ---- API Files ---- #
   
-  # source(file.path("api","prices_entsoe_server.R"), encoding = "UTF-8", local = TRUE)$value
+  source(file.path("api","prices_entsoe_server.R"), encoding = "UTF-8", local = TRUE)$value
   
   # ---- Server Files --- #
   
