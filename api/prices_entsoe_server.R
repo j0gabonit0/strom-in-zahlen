@@ -1,10 +1,3 @@
-'
-day_ahead_prices_df <- api_day_ahead_prices(document_type = "A44",
-                     in_Domain = "10YCZ-CEPS-----N",
-                     out_Domain = "10YCZ-CEPS-----N",
-                     period_start = "202012312300",
-                     period_end = "202112222300")
-
 
 
 api_day_ahead_prices <-
@@ -84,7 +77,7 @@ api_day_ahead_prices <-
     unnest(cols = names(.)) %>%
     # convert data type
     readr::type_convert() %>%
-    select(-Point...27, -Publication_MarketDocument_id, -resolution) %>%
+    select(-Publication_MarketDocument_id,-resolution) %>%
     pivot_longer(!timeInterval, names_to = "timee",
                  values_to = "value") %>%
     mutate(date = timeInterval %>% as.character() %>% substr(1, 10)) %>%
@@ -93,12 +86,35 @@ api_day_ahead_prices <-
     select(-timeInterval) %>%
     mutate(timestamp = as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%S")) %>%
     unnest(., value) %>%
-    mutate(value = as.numeric(value)) %>% 
+    mutate(value = as.numeric(value)) %>%
     write.csv("C:/Users/corvi/strom-in-zahlen/api/day_ahead_price_db.csv",row.names=FALSE)
   
   }
 
-'
+
+
+'period_end_api = "202103012300"'
+period <- as.character(Sys.Date()) %>% str_replace_all("-","") %>% paste0("0000")
+
+
+
+
+api_day_ahead_prices(document_type = "A44",
+                     in_Domain = "10YCZ-CEPS-----N",
+                     out_Domain = "10YCZ-CEPS-----N",
+                     period_start = "202101012300",
+                     period_end = period)
+
+
+
+document_type = "A44"
+in_Domain = "10YCZ-CEPS-----N"
+out_Domain = "10YCZ-CEPS-----N"
+period_start = "202101012300"
+period_end = "202103012300"
+
+Sys.sleep(5)
+
 day_ahead_prices_df <- read.csv("C:/Users/corvi/strom-in-zahlen/api/day_ahead_price_db.csv")
 
   
