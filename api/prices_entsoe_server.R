@@ -1,3 +1,10 @@
+day_ahead_prices_df <- api_day_ahead_prices(document_type = "A44",
+                     in_Domain = "10YCZ-CEPS-----N",
+                     out_Domain = "10YCZ-CEPS-----N",
+                     period_start = "202012312300",
+                     period_end = "202112302300")
+
+
 
 
 api_day_ahead_prices <-
@@ -29,10 +36,10 @@ api_day_ahead_prices <-
       api_url
     )
   day_ahead_content <- content(day_ahead_api, "raw")
-  writeBin(day_ahead_content, "C:/Users/corvi/myfile.xml")
+  writeBin(day_ahead_content, "C:/Users/sascha/myfile.xml")
   
   ### Einlesen des XML Files und formatieren als Dataframe mit 2 Spalten ###
-  day_ahead_prices_xml = as_list(read_xml("C:/Users/corvi/myfile.xml"))
+  day_ahead_prices_xml = as_list(read_xml("C:/Users/sascha/myfile.xml"))
   
   xml_df = tibble::as_tibble(day_ahead_prices_xml) %>%
     unnest_longer(Publication_MarketDocument)
@@ -88,8 +95,9 @@ api_day_ahead_prices <-
     unnest(., value) %>%
     mutate(value = as.numeric(value)) %>%
     write.csv("C:/Users/corvi/strom-in-zahlen/api/day_ahead_price_db.csv",row.names=FALSE)
-  
+
   }
+
 
 
 
@@ -255,3 +263,53 @@ day_ah_pr_grpd_chart <- reactive({
 output$day_ah_pr_grpd_chart_output <- renderPlotly({
   day_ah_pr_grpd_chart()
 })
+
+day_ah_pr_avg_month <- reactive({
+  data <- day_ahead_prices_df
+  data %>%
+    mutate(timestamp = as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%S")) %>%
+    group_by(timestamp = floor_date(timestamp, unit = "month")) %>%
+    summarise(value = mean(value)) %>%
+    plot_ly(type = 'scatter', mode = 'lines') %>%
+    add_trace(x = ~ timestamp,
+              y = ~ value,
+              name = 'time') %>%
+    layout(
+      showlegend = F,
+      title = "Day Ahead Price Tagesdurchschnitt",
+      xaxis = list(
+        title = "Datum",
+        showline = T,
+        linewidth = 2,
+        linecolor = 'black',
+        showgrid = T,
+        gridcolor = 'red'
+        ),
+      yaxis = list(
+        title = "\U20AC/MwH",
+        tickprefix="\U20AC",
+        showline = T,
+        linewidth = 2,
+        linecolor = 'black',
+        showgrid = T,
+        gridcolor = 'blue',
+        nticks = 20
+    )
+    )
+})
+    
+output$day_ah_pr_avg_month <- renderPlotly({
+  day_ah_pr_avg_month()
+}) 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  
+  
+  

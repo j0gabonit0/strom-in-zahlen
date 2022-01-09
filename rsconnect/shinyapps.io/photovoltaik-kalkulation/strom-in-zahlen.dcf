@@ -1,0 +1,13 @@
+name: strom-in-zahlen
+title: strom-in-zahlen
+username:
+account: photovoltaik-kalkulation
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5382011
+bundleId: 5420995
+url: https://photovoltaik-kalkulation.shinyapps.io/strom-in-zahlen/
+when: 1640902957.69519
+lastSyncTime: 1640902957.69519
+asMultiple: FALSE
+asStatic: FALSE
