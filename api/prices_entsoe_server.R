@@ -1,9 +1,3 @@
-day_ahead_prices_df <- api_day_ahead_prices(document_type = "A44",
-                     in_Domain = "10YCZ-CEPS-----N",
-                     out_Domain = "10YCZ-CEPS-----N",
-                     period_start = "202012312300",
-                     period_end = "202112302300")
-
 
 
 
@@ -36,10 +30,10 @@ api_day_ahead_prices <-
       api_url
     )
   day_ahead_content <- content(day_ahead_api, "raw")
-  writeBin(day_ahead_content, "C:/Users/sascha/myfile.xml")
+  writeBin(day_ahead_content, "C:/Users/corvi/myfile.xml")
   
   ### Einlesen des XML Files und formatieren als Dataframe mit 2 Spalten ###
-  day_ahead_prices_xml = as_list(read_xml("C:/Users/sascha/myfile.xml"))
+  day_ahead_prices_xml = as_list(read_xml("C:/Users/corvi/myfile.xml"))
   
   xml_df = tibble::as_tibble(day_ahead_prices_xml) %>%
     unnest_longer(Publication_MarketDocument)
@@ -99,29 +93,19 @@ api_day_ahead_prices <-
   }
 
 
-
-
-'period_end_api = "202103012300"'
-period <- as.character(Sys.Date()) %>% str_replace_all("-","") %>% paste0("0000")
-
-
-
-
 api_day_ahead_prices(document_type = "A44",
                      in_Domain = "10YCZ-CEPS-----N",
                      out_Domain = "10YCZ-CEPS-----N",
-                     period_start = "202101012300",
-                     period_end = period)
+                     period_start = "202103010000",
+                     period_end = period_end_api)
 
-
-
-document_type = "A44"
+'document_type = "A44"
 in_Domain = "10YCZ-CEPS-----N"
 out_Domain = "10YCZ-CEPS-----N"
 period_start = "202101012300"
 period_end = "202103012300"
 
-Sys.sleep(5)
+Sys.sleep(5)'
 
 day_ahead_prices_df <- read.csv("C:/Users/corvi/strom-in-zahlen/api/day_ahead_price_db.csv")
 

@@ -33,7 +33,7 @@ server <- function(input, output, session) {
   
   # ---- Global Files ---- #
   
-  #source(file.path("C:/Users/corvi/strom-in-zahlen/api/","globale.R"), encoding = "UTF-8", local = TRUE)$value
+  source(file.path("C:/Users/corvi/strom-in-zahlen/api/","globale.R"), encoding = "UTF-8", local = TRUE)$value
  
   # ---- API Files ---- #
   
