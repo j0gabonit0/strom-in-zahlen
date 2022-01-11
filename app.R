@@ -33,11 +33,11 @@ server <- function(input, output, session) {
   
   # ---- Global Files ---- #
   
-  source(file.path("C:/Users/corvi/strom-in-zahlen/api/","globale.R"), encoding = "UTF-8", local = TRUE)$value
+  source(file.path("api","globale.R"), encoding = "UTF-8", local = TRUE)$value
  
   # ---- API Files ---- #
   
-  source(file.path("api","prices_entsoe_server.R"), encoding = "UTF-8", local = TRUE)$value
+  source(file.path("api","prices_entsoe_server_df.R"), encoding = "UTF-8", local = TRUE)$value
   
   # ---- Server Files --- #
   
