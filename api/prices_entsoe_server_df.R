@@ -1,11 +1,26 @@
 ### Ermittlung des letzten Datensatzes
 
-day_ahead_prices_db <- read.csv("C:/Users/saschaw/strom-in-zahlen/api/day_ahead_price_db.csv") %>% 
+day_ahead_prices_db <- read.csv("api/day_ahead_price_db.csv") %>% 
  mutate(timestamp = as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%S")) %>% 
  filter(timestamp > 0)
 
-#### Jüngstes Datum in der Datenbank
+today <- Sys.Date()
+
+#### Juengstes Datum in der Datenbank
 last_day <- max(day_ahead_prices_db$timestamp)
+
+if(last_day > today) {
+  day_ahead_prices_db <- day_ahead_prices_db %>% 
+    filter(timestamp < today)
+  
+} else{
+  last_day <- last_day
+}
+
+
+
+last_timestamp <- max(day_ahead_prices_db$timestamp)
+
 
 day_ahead_prices_db <- day_ahead_prices_db %>% 
   filter(timestamp < last_day)
@@ -25,6 +40,8 @@ in_Domain = "10YCZ-CEPS-----N"
 out_Domain = "10YCZ-CEPS-----N"
 period_start = start_time
 period_end = end_time
+
+### Ifelse wenn der letzte Eintrag in der Datenbank 
 
 ### Einrichten einer leeren Datenbank
 day_ahead_prices_db_nw <-
@@ -60,10 +77,10 @@ api_day_ahead_prices <-
         api_url
       )
     day_ahead_content <- content(day_ahead_api, "raw")
-    writeBin(day_ahead_content, "C:/Users/saschaw/myfile.xml")
+    writeBin(day_ahead_content, "myfile.xml")
     
     ### Einlesen des XML Files und formatieren als Dataframe mit 2 Spalten ###
-    day_ahead_prices_xml = as_list(read_xml("C:/Users/saschaw/myfile.xml"))
+    day_ahead_prices_xml = as_list(read_xml("myfile.xml"))
     
     xml_df = tibble::as_tibble(day_ahead_prices_xml) %>%
       unnest_longer(Publication_MarketDocument)
@@ -129,7 +146,7 @@ api_day_ahead_prices <-
       replace(is.na(.), 0) %>% 
     
     
-    write.csv("C:/Users/saschaw/strom-in-zahlen/api/day_ahead_price_db.csv",row.names=FALSE)
+    write.csv("api/day_ahead_price_db.csv",row.names=FALSE)
     
   }
 
@@ -140,15 +157,10 @@ api_day_ahead_prices(document_type = "A44",
                      period_start = start_time,
                      period_end = end_time)
 
-document_type = "A44"
-in_Domain = "10YCZ-CEPS-----N"
-out_Domain = "10YCZ-CEPS-----N"
-period_start = start_time
-period_end = end_time
 
 
 
-day_ahead_prices_df <- read.csv("C:/Users/saschaw/strom-in-zahlen/api/day_ahead_price_db.csv")
+day_ahead_prices_df <- read.csv("api/day_ahead_price_db.csv")
 
 
 
