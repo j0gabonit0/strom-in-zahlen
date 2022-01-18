@@ -12,20 +12,15 @@ tabPanel(title = "Day Ahead Price",
                sidebarPanel(
                  width = 2,
                  fluid = TRUE,
-                 menuItem("Time Series", tabName = "dash_ui", selected = TRUE),
-                 
-                 
-                 
+                 menuItem("Boersenpreise EEX", tabName = "dash_ui", selected = TRUE),
                )
              ),
              
              mainPanel(width = 10,
                        tabItems(source(
-                         file.path("Dashboard/", "dashboard_ui.R"),
+                         file.path("dashboard", "dashboard_ui.R"),
                          encoding = "UTF-8",
                          local = TRUE
                        )$value))
            )
          ))
-
-

@@ -5,9 +5,10 @@ account: photovoltaik-kalkulation
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5382011
-bundleId: 5420995
+bundleId: 5480166
 url: https://photovoltaik-kalkulation.shinyapps.io/strom-in-zahlen/
-when: 1640902957.69519
-lastSyncTime: 1640902957.69519
+when: 1642495700.87882
+lastSyncTime: 1642495700.87882
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: api/prices_entsoe.R

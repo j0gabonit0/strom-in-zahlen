@@ -1,27 +1,18 @@
+today <- Sys.Date()
+
+
 ### Ermittlung des letzten Datensatzes
 
 day_ahead_prices_db <- read.csv("api/day_ahead_price_db.csv") %>% 
  mutate(timestamp = as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%S")) %>% 
- filter(timestamp > 0)
+ filter(timestamp > 0) %>% 
+  filter(timestamp < today)
 
-today <- Sys.Date()
+
 
 #### Juengstes Datum in der Datenbank
 last_day <- max(day_ahead_prices_db$timestamp)
-
-if(last_day > today) {
-  day_ahead_prices_db <- day_ahead_prices_db %>% 
-    filter(timestamp < today)
-  
-} else{
-  last_day <- last_day
-}
-
-
-
 last_timestamp <- max(day_ahead_prices_db$timestamp)
-
-
 day_ahead_prices_db <- day_ahead_prices_db %>% 
   filter(timestamp < last_day)
 
@@ -183,7 +174,7 @@ day_ah_pr_chart <- reactive({
         linewidth = 2,
         linecolor = 'black',
         showgrid = T,
-        gridcolor = 'red',
+        gridcolor = 'gray',
         rangeslider = list(visible = T),
         rangeselector = list(buttons = list(
           list(
@@ -220,7 +211,7 @@ day_ah_pr_chart <- reactive({
         linewidth = 2,
         linecolor = 'black',
         showgrid = T,
-        gridcolor = 'blue',
+        gridcolor = 'gray',
         nticks = 20
       )
     )
@@ -253,7 +244,7 @@ day_ah_pr_grpd_chart <- reactive({
         linewidth = 2,
         linecolor = 'black',
         showgrid = T,
-        gridcolor = 'red',
+        gridcolor = 'gray',
         rangeslider = list(visible = T),
         rangeselector = list(buttons = list(
           list(
@@ -290,7 +281,7 @@ day_ah_pr_grpd_chart <- reactive({
         linewidth = 2,
         linecolor = 'black',
         showgrid = T,
-        gridcolor = 'blue',
+        gridcolor = 'gray',
         nticks = 20
       )
     )
@@ -320,7 +311,7 @@ day_ah_pr_avg_month <- reactive({
         linewidth = 2,
         linecolor = 'black',
         showgrid = T,
-        gridcolor = 'red'
+        gridcolor = 'gray'
       ),
       yaxis = list(
         title = "\U20AC/MwH",
@@ -329,7 +320,7 @@ day_ah_pr_avg_month <- reactive({
         linewidth = 2,
         linecolor = 'black',
         showgrid = T,
-        gridcolor = 'blue',
+        gridcolor = 'gray',
         nticks = 20
       )
     )
