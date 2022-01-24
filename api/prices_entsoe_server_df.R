@@ -11,7 +11,11 @@ day_ahead_prices_db <- read.csv("api/day_ahead_price_db.csv") %>%
 
 
 #### Juengstes Datum in der Datenbank
-last_day <- max(day_ahead_prices_db$timestamp)
+last_day <- max(day_ahead_prices_db$timestamp) %>% 
+  substr(1, 11) %>% 
+  paste0("0000")
+
+  
 last_timestamp <- max(day_ahead_prices_db$timestamp)
 day_ahead_prices_db <- day_ahead_prices_db %>% 
   filter(timestamp < last_day)
@@ -26,11 +30,6 @@ end_time <- paste0(Sys.Date() + 1)
 end_time <- gsub("-", "", as.character(end_time), 1, 16) %>% paste0("0000")
 
 
-document_type = "A44"
-in_Domain = "10YCZ-CEPS-----N"
-out_Domain = "10YCZ-CEPS-----N"
-period_start = start_time
-period_end = end_time
 
 ### Ifelse wenn der letzte Eintrag in der Datenbank 
 
