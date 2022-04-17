@@ -3,10 +3,10 @@ today <- Sys.Date()
 
 ### Ermittlung des letzten Datensatzes
 
-day_ahead_prices_db <- read.csv("api/day_ahead_price_db.csv") %>% 
+day_ahead_prices_db <- read.csv("api/data/day_ahead_price_db.csv") %>% 
  mutate(timestamp = as.POSIXct(timestamp, format = "%Y-%m-%d %H:%M:%S")) %>% 
  filter(timestamp > 0) %>% 
-  filter(timestamp < today)
+ filter(timestamp < today)
 
 
 
@@ -30,8 +30,6 @@ end_time <- paste0(Sys.Date() + 1)
 end_time <- gsub("-", "", as.character(end_time), 1, 16) %>% paste0("0000")
 
 
-
-### Ifelse wenn der letzte Eintrag in der Datenbank 
 
 ### Einrichten einer leeren Datenbank
 day_ahead_prices_db_nw <-
@@ -127,16 +125,11 @@ api_day_ahead_prices <-
       mutate(value = as.numeric(value)) 
       
     
-    day_ahead_prices_db_nw <- bind_rows(day_ahead_prices_db_nw, dap_df) %>%
-      replace(is.na(.), 0)
+    day_ahead_prices_db_nw <- bind_rows(day_ahead_prices_db, dap_df)
     
-    day_ahead_prices_db_nw <- day_ahead_prices_db_nw %>% 
-      replace(is.na(.), 0) %>% 
-      merge(day_ahead_prices_db, ., all = TRUE) %>%
-      replace(is.na(.), 0) %>% 
+        
     
-    
-    write.csv("api/day_ahead_price_db.csv",row.names=FALSE)
+    write.csv(day_ahead_prices_db_nw,"api/data/day_ahead_price_db.csv",row.names=FALSE)
     
   }
 
@@ -148,9 +141,17 @@ api_day_ahead_prices(document_type = "A44",
                      period_end = end_time)
 
 
+document_type = "A44"
+in_Domain = "10YCZ-CEPS-----N"
+out_Domain = "10YCZ-CEPS-----N"
+period_start = start_time
+period_end = end_time
 
 
-day_ahead_prices_df <- read.csv("api/day_ahead_price_db.csv")
+
+
+
+day_ahead_prices_df <- read.csv("api/data/day_ahead_price_db.csv")
 
 
 
